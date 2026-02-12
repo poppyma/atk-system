@@ -6,6 +6,7 @@ import QuotationModal from "./QuotationModal";
 
 interface AtkTableProps {
   items: AtkItem[];
+  isAdmin: boolean;
   onEdit?: (item: AtkItem) => void;
   onDelete?: (id: number) => void;
   onAddQuotation?: (
@@ -59,7 +60,7 @@ const formatPrice = (price: number): string => {
   }).format(price);
 };
 
-export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEditQuotation, onDeleteQuotation }: AtkTableProps) {
+export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotation, onEditQuotation, onDeleteQuotation }: AtkTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -268,6 +269,9 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
               <th className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">
                 Foto
               </th>
+              <th className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">
+                Quotation
+              </th>
               <th className="px-4 py-3 text-center font-semibold text-gray-700">
                 Aksi
               </th>
@@ -329,6 +333,9 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
                         <span className="text-gray-400 text-sm">-</span>
                       )}
                     </td>
+                    <td className="border-r border-gray-200 px-4 py-3 text-center">
+                      <span className="text-gray-400 text-sm">-</span>
+                    </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex justify-center gap-2">
                         <button
@@ -340,7 +347,7 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
                         >
                           Detail
                         </button>
-                        {onEdit && (
+                        {isAdmin && onEdit && (
                           <button
                             onClick={() => onEdit(item)}
                             className="rounded-lg bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-700 transition-colors"
@@ -348,7 +355,7 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
                             Edit
                           </button>
                         )}
-                        {onDelete && (
+                        {isAdmin && onDelete && (
                           <button
                             onClick={() => {
                               if (confirm(`Hapus "${item.description}"?`)) {
@@ -453,6 +460,7 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
       <QuotationModal
         item={selectedItem}
         isOpen={isModalOpen}
+        isAdmin={isAdmin}
         onClose={() => setIsModalOpen(false)}
         onAddQuotation={onAddQuotation}
         onEditQuotation={onEditQuotation}

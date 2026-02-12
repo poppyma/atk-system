@@ -5,9 +5,12 @@ import AtkTable from "@/app/components/AtkTable";
 import CreateAtkModal from "@/app/components/CreateAtkModal";
 import EditAtkModal from "@/app/components/EditAtkModal";
 import Toast from "@/app/components/Toast";
+import LoginPage from "@/app/components/LoginPage";
 import { AtkItem } from "@/app/data/atkData";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function Home() {
+  const { isLoggedIn, role, logout } = useAuth();
   const [items, setItems] = useState<AtkItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -16,7 +19,7 @@ export default function Home() {
   const [toastMessage, setToastMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch data dari API saat component mount
+  // Fetch data dari API saat component mount - MUST be before conditional return
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -35,8 +38,15 @@ export default function Home() {
       }
     };
 
-    fetchItems();
-  }, []);
+    if (isLoggedIn) {
+      fetchItems();
+    }
+  }, [isLoggedIn]);
+
+  // If not logged in, show login page
+  if (!isLoggedIn) {
+    return <LoginPage />;
+  }
 
   const handleCreateItem = async (
     newItem: Omit<AtkItem, "id" | "quotations"> & { quotations?: AtkItem["quotations"] }
@@ -242,29 +252,42 @@ export default function Home() {
     }
   };
 
+  // If not logged in, show login page
+  if (!isLoggedIn) {
+    return <LoginPage />;
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
       {/* Header */}
       <header className="border-b border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">
-                📋 Master ATK
+              <h1 className="text-3xl font-bold text-gray-900">
+                📋 MANIS (MAster Non-stock Item System)
               </h1>
-              <p className="mt-2 text-gray-600">
-                Alat Tulis Kantor - Manajemen Inventori dan Supplier
+              <p className="mt-2 text-sm text-gray-600">
+                Sistem Manajemen Item Non-Stock dan Supplier
               </p>
             </div>
-            <div className="flex flex-col gap-3 items-end sm:flex-row">
-              <div className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-white font-semibold">
-                Total Items: {items.length}
+            <div className="flex flex-col gap-2 items-end sm:flex-row">
+              <div className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1.5 text-white font-semibold text-sm">
+                {role === "admin" ? "🔐 Admin" : role === "guest" ? "👥 Tamu" : "👤 User"} | Total Items: {items.length}
               </div>
+              {role === "admin" && (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-4 py-1.5 font-semibold text-sm text-white hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
+                >
+                  + Buat Input Data Master
+                </button>
+              )}
               <button
-                onClick={() => setIsModalOpen(true)}
-                className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-6 py-2 font-semibold text-white hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
+                onClick={logout}
+                className="rounded-lg bg-gradient-to-r from-red-500 to-red-600 px-4 py-1.5 font-semibold text-sm text-white hover:from-red-600 hover:to-red-700 transition-all shadow-md hover:shadow-lg"
               >
-                + Buat Input Data Master
+                Logout
               </button>
             </div>
           </div>
@@ -324,7 +347,7 @@ export default function Home() {
               </div>
             </div>
           ) : items.length > 0 ? (
-            <AtkTable items={items} onEdit={handleEditItem} onDelete={handleDeleteItem} onAddQuotation={handleAddQuotation} onEditQuotation={handleEditQuotation} onDeleteQuotation={handleDeleteQuotation} />
+            <AtkTable items={items} isAdmin={role === "admin"} onEdit={handleEditItem} onDelete={handleDeleteItem} onAddQuotation={handleAddQuotation} onEditQuotation={handleEditQuotation} onDeleteQuotation={handleDeleteQuotation} />
           ) : (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
@@ -341,22 +364,26 @@ export default function Home() {
       </footer>
 
       {/* Create Modal */}
-      <CreateAtkModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreateItem}
-      />
+      {role === "admin" && (
+        <CreateAtkModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleCreateItem}
+        />
+      )}
 
       {/* Edit Modal */}
-      <EditAtkModal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedItemForEdit(null);
-        }}
-        item={selectedItemForEdit}
-        onSubmit={handleUpdateItem}
-      />
+      {role === "admin" && (
+        <EditAtkModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedItemForEdit(null);
+          }}
+          item={selectedItemForEdit}
+          onSubmit={handleUpdateItem}
+        />
+      )}
 
       {/* Toast Notification */}
       {showToast && (

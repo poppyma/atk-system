@@ -23,6 +23,7 @@ export default function CreateAtkModal({
     lastOrder: "0 pcs",
     remark: "",
     foto: "",
+    quotationRemark: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,6 +71,7 @@ export default function CreateAtkModal({
       lastOrder: "0 pcs",
       remark: "",
       foto: "",
+      quotationRemark: "",
     });
     setFotoPreview("");
     setErrors({});
@@ -291,6 +293,20 @@ export default function CreateAtkModal({
             />
           </div>
 
+          {/* Quotation */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Quotation
+            </label>
+            <input
+              type="text"
+              name="quotationRemark"
+              value={formData.quotationRemark}
+              onChange={handleChange}
+              className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+            />
+          </div>
+
           {/* Upload Foto */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -319,12 +335,7 @@ export default function CreateAtkModal({
             </div>
           </div>
 
-          {/* Info Box */}
-          <div className="rounded-lg bg-blue-50 border border-blue-200 p-4">
-            <p className="text-sm text-blue-800">
-              <strong>💡 Catatan:</strong> Data quotation (penawaran harga dari supplier) dapat ditambahkan setelah membuat master ATK ini.
-            </p>
-          </div>
+
         </form>
 
         {/* Footer */}

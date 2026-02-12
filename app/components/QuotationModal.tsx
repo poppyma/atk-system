@@ -8,6 +8,7 @@ import EditQuotationModal from "./EditQuotationModal";
 interface QuotationModalProps {
   item: AtkItem | null;
   isOpen: boolean;
+  isAdmin: boolean;
   onClose: () => void;
   onAddQuotation?: (
     itemId: string,
@@ -39,6 +40,7 @@ const formatPrice = (price: number): string => {
 export default function QuotationModal({
   item,
   isOpen,
+  isAdmin,
   onClose,
   onAddQuotation,
   onEditQuotation,
@@ -122,7 +124,7 @@ export default function QuotationModal({
             <h3 className="text-lg font-semibold text-gray-900">
               Penawaran Harga dari Supplier
             </h3>
-            {onAddQuotation && (
+            {isAdmin && onAddQuotation && (
               <button
                 onClick={() => setIsAddQuotationOpen(true)}
                 className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors flex items-center gap-2"
@@ -211,20 +213,24 @@ export default function QuotationModal({
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => handleEditClick(quot)}
-                          className="rounded border border-blue-300 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100 hover:border-blue-400 transition-colors"
-                          title="Edit"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(quot.id)}
-                          className="rounded border border-red-300 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100 hover:border-red-400 transition-colors"
-                          title="Hapus"
-                        >
-                          Hapus
-                        </button>
+                        {isAdmin && (
+                          <>
+                            <button
+                              onClick={() => handleEditClick(quot)}
+                              className="rounded border border-blue-300 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100 hover:border-blue-400 transition-colors"
+                              title="Edit"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(quot.id)}
+                              className="rounded border border-red-300 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100 hover:border-red-400 transition-colors"
+                              title="Hapus"
+                            >
+                              Hapus
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>

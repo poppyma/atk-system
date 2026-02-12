@@ -25,6 +25,7 @@ export default function EditAtkModal({
     lastOrder: "",
     remark: "",
     foto: "",
+    quotationRemark: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,6 +45,7 @@ export default function EditAtkModal({
         lastOrder: item.lastOrder || "",
         remark: item.remark || "",
         foto: item.foto || "",
+        quotationRemark: "",
       });
       // Set preview dari existing foto
       if (item.foto) {
@@ -306,6 +308,20 @@ export default function EditAtkModal({
             />
           </div>
 
+          {/* Quotation */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Quotation
+            </label>
+            <input
+              type="text"
+              name="quotationRemark"
+              value={formData.quotationRemark}
+              onChange={handleChange}
+              className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+            />
+          </div>
+
           {/* Upload Foto */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -334,7 +350,7 @@ export default function EditAtkModal({
             </div>
           </div>
 
-          {/* Buttons */}
+
           <div className="flex gap-3 justify-end border-t border-gray-200 pt-6">
             <button
               type="button"
