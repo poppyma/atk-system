@@ -37,7 +37,7 @@ export default function AddQuotationModal({
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "supplier" || name === "unit" ? value : Math.max(0, parseInt(value) || 0),
+        name === "supplier" || name === "unit" || name === "remark" ? value : Math.max(0, parseInt(value) || 0),
     }));
 
     if (errors[name]) {
