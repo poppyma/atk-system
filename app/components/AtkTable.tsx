@@ -79,12 +79,15 @@ export default function AtkTable({ items, onEdit, onDelete, onAddQuotation, onEd
   }, [items, isModalOpen, selectedItem?.id]);
 
   // Filter berdasarkan search
-  const filteredItems = items.filter(
-    (item) =>
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.ipd.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.specification.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredItems = items.filter((item) => {
+    const keyword = searchTerm.toLowerCase();
+
+    return (
+      (item.description ?? "").toLowerCase().includes(keyword) ||
+      (item.ipd ?? "").toLowerCase().includes(keyword) ||
+      (item.specification ?? "").toLowerCase().includes(keyword)
+    );
+  });
 
   // Sort
   const sortedItems = sortColumn === "" 
