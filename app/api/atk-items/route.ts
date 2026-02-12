@@ -75,10 +75,10 @@ export async function POST(request: NextRequest) {
 
     const { ipd, description, specification, qty, uom, lastOrder, remark, foto } = body;
 
-    // Validasi
-    if (!ipd || !description || !specification || !qty || !uom) {
+    // Validasi - hanya IPD, Description, dan UoM yang wajib
+    if (!ipd || !description || !uom) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields: IPD, Description, UoM" },
         { status: 400 }
       );
     }

@@ -79,15 +79,10 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
     }
   }, [items, isModalOpen, selectedItem?.id]);
 
-  // Filter berdasarkan search
+  // Filter berdasarkan search - hanya berdasarkan description
   const filteredItems = items.filter((item) => {
     const keyword = searchTerm.toLowerCase();
-
-    return (
-      (item.description ?? "").toLowerCase().includes(keyword) ||
-      (item.ipd ?? "").toLowerCase().includes(keyword) ||
-      (item.specification ?? "").toLowerCase().includes(keyword)
-    );
+    return (item.description ?? "").toLowerCase().includes(keyword);
   });
 
   // Sort
@@ -154,7 +149,7 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
         <div className="flex-1 flex gap-2">
           <input
             type="text"
-            placeholder="Cari berdasarkan IPD, Deskripsi, atau Spesifikasi..."
+            placeholder="Cari berdasarkan Deskripsi..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -186,13 +181,9 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
           <thead>
             <tr className="border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
               <th
-                onClick={() => handleSort("ipd")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 hover:bg-blue-200"
+                className="border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700"
               >
-                <div className="flex items-center justify-between gap-2">
-                  IPD
-                  <SortIcon column="ipd" />
-                </div>
+                IPD
               </th>
               <th
                 onClick={() => handleSort("description")}
@@ -204,67 +195,39 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
                 </div>
               </th>
               <th
-                onClick={() => handleSort("specification")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 hover:bg-blue-200 min-w-[150px]"
+                className="border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700"
               >
-                <div className="flex items-center justify-between gap-2">
-                  Specification
-                  <SortIcon column="specification" />
-                </div>
+                Specification
               </th>
               <th
-                onClick={() => handleSort("qty")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700 hover:bg-blue-200"
+                className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700"
               >
-                <div className="flex items-center justify-center gap-2">
-                  Qty (Satuan)
-                  <SortIcon column="qty" />
-                </div>
+                Qty (Satuan)
               </th>
               <th
-                onClick={() => handleSort("uom")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700 hover:bg-blue-200"
+                className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700"
               >
-                <div className="flex items-center justify-center gap-2">
-                  UoM
-                  <SortIcon column="uom" />
-                </div>
+                UoM
               </th>
               <th
-                onClick={() => handleSort("lastOrder")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700 hover:bg-blue-200"
+                className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700"
               >
-                <div className="flex items-center justify-center gap-2">
-                  Last Order
-                  <SortIcon column="lastOrder" />
-                </div>
+                Last Order
               </th>
               <th
-                onClick={() => handleSort("price")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-right font-semibold text-gray-700 hover:bg-blue-200 min-w-[120px]"
+                className="border-r border-gray-200 px-4 py-3 text-right font-semibold text-gray-700 min-w-[120px]"
               >
-                <div className="flex items-center justify-end gap-2">
-                  Price
-                  <SortIcon column="price" />
-                </div>
+                Price
               </th>
               <th
-                onClick={() => handleSort("supplier")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 hover:bg-blue-200 min-w-[130px]"
+                className="border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 min-w-[130px]"
               >
-                <div className="flex items-center justify-between gap-2">
-                  Supplier
-                  <SortIcon column="supplier" />
-                </div>
+                Supplier
               </th>
               <th
-                onClick={() => handleSort("remark")}
-                className="cursor-pointer border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 hover:bg-blue-200 min-w-[120px]"
+                className="border-r border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 min-w-[120px]"
               >
-                <div className="flex items-center justify-between gap-2">
-                  Remark
-                  <SortIcon column="remark" />
-                </div>
+                Remark
               </th>
               <th className="border-r border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">
                 Foto

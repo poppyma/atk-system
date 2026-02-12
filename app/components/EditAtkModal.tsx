@@ -61,12 +61,7 @@ export default function EditAtkModal({
     if (!formData.ipd.trim()) newErrors.ipd = "IPD tidak boleh kosong";
     if (!formData.description.trim())
       newErrors.description = "Deskripsi tidak boleh kosong";
-    if (!formData.specification.trim())
-      newErrors.specification = "Spesifikasi tidak boleh kosong";
-    if (formData.qty <= 0) newErrors.qty = "Qty harus lebih dari 0";
     if (!formData.uom) newErrors.uom = "UoM harus dipilih";
-    if (!formData.lastOrder.trim())
-      newErrors.lastOrder = "Last order tidak boleh kosong";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -201,7 +196,7 @@ export default function EditAtkModal({
           {/* Specification */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Spesifikasi <span className="text-red-500">*</span>
+              Spesifikasi
             </label>
             <textarea
               name="specification"
@@ -209,22 +204,15 @@ export default function EditAtkModal({
               onChange={handleChange}
               placeholder="Contoh: Tinta biru, diameter 0.7mm, kemasan per 12 pcs"
               rows={3}
-              className={`w-full rounded-lg border-2 px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors resize-none ${
-                errors.specification
-                  ? "border-red-500 bg-red-50"
-                  : "border-gray-300 bg-white focus:border-blue-500"
-              }`}
+              className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
             />
-            {errors.specification && (
-              <p className="mt-1 text-sm text-red-600">{errors.specification}</p>
-            )}
           </div>
 
           {/* Qty and UoM */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Qty <span className="text-red-500">*</span>
+                Qty
               </label>
               <input
                 type="number"
@@ -233,15 +221,8 @@ export default function EditAtkModal({
                 onChange={handleChange}
                 placeholder="0"
                 min="0"
-                className={`w-full rounded-lg border-2 px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors ${
-                  errors.qty
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300 bg-white focus:border-blue-500"
-                }`}
+                className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
               />
-              {errors.qty && (
-                <p className="mt-1 text-sm text-red-600">{errors.qty}</p>
-              )}
             </div>
 
             <div>
@@ -274,7 +255,7 @@ export default function EditAtkModal({
           {/* Last Order */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Last Order <span className="text-red-500">*</span>
+              Last Order
             </label>
             <input
               type="text"
@@ -282,15 +263,8 @@ export default function EditAtkModal({
               value={formData.lastOrder}
               onChange={handleChange}
               placeholder="Contoh: 2 pcs, 3 pcs, 1 rim"
-              className={`w-full rounded-lg border-2 px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none transition-colors ${
-                errors.lastOrder
-                  ? "border-red-500 bg-red-50"
-                  : "border-gray-300 bg-white focus:border-blue-500"
-              }`}
+              className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
             />
-            {errors.lastOrder && (
-              <p className="mt-1 text-sm text-red-600">{errors.lastOrder}</p>
-            )}
           </div>
 
           {/* Remark */}
