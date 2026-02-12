@@ -60,8 +60,8 @@ export async function PUT(
         id,
         supplier,
         price,
-        quantity,
-        moq
+        unit,
+        remark
       FROM quotations
       WHERE atk_item_id = $1
       ORDER BY price ASC
@@ -84,8 +84,8 @@ export async function PUT(
           id: q.id.toString(),
           supplier: q.supplier,
           price: parseFloat(q.price),
-          quantity: q.quantity,
-          moq: q.moq,
+          unit: q.unit,
+          remark: q.remark,
         })),
       },
       { status: 200 }
