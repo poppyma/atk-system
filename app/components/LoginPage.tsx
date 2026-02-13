@@ -46,33 +46,77 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-50 px-4 py-6">
-      {/* Background decorative elements */}
-      <div className="fixed top-0 right-0 w-96 h-96 bg-gradient-to-b from-blue-200 to-transparent rounded-full blur-3xl opacity-15 -z-10"></div>
-      <div className="fixed bottom-0 left-0 w-96 h-96 bg-gradient-to-t from-indigo-200 to-transparent rounded-full blur-3xl opacity-15 -z-10"></div>
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-6">
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl shadow-2xl overflow-hidden bg-white">
+        {/* Left Section - Branding & Description */}
+        <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 p-8 text-white relative overflow-hidden">
+          {/* Decorative circles */}
+          <div className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          
+          <div className="relative z-10">
+            <h2 className="text-5xl md:text-6xl font-black leading-tight mb-1 tracking-tight drop-shadow-lg transform hover:scale-105 transition-transform duration-200">
+              📋 MANIS
+            </h2>
+            <p className="text-base md:text-lg text-blue-100 font-light mb-1">
+              (MAster Non-stock Item System)
+            </p>
+            <p className="text-lg md:text-xl text-blue-50 font-semibold mb-6">
+              Sistem Manajemen Item Non-Stock dan Supplier
+            </p>
 
-      <div className="w-full max-w-md">
-        {/* Header Section */}
-        <div className="mb-4 text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl mb-3 shadow-lg">
-            <span className="text-3xl">📋</span>
+            {/* Feature cards */}
+            <div className="space-y-2">
+              <div className="flex gap-3 items-start">
+                <div className="text-4xl flex-shrink-0 hover:scale-110 transition-transform duration-200">📊</div>
+                <div>
+                  <h3 className="font-bold text-lg tracking-wide">Data Management</h3>
+                  <p className="text-sm text-blue-100/90">Kelola master data dengan mudah</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 items-start">
+                <div className="text-4xl flex-shrink-0 hover:scale-110 transition-transform duration-200">🔍</div>
+                <div>
+                  <h3 className="font-bold text-lg tracking-wide">Advanced Search</h3>
+                  <p className="text-sm text-blue-100/90">Cari dan filter data dengan cepat</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 items-start">
+                <div className="text-4xl flex-shrink-0 hover:scale-110 transition-transform duration-200">🛡️</div>
+                <div>
+                  <h3 className="font-bold text-lg tracking-wide">Secure Access</h3>
+                  <p className="text-sm text-blue-100/90">Kontrol akses berbasis peran</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent mb-1 tracking-tight">
-            MANIS
-          </h1>
-          <p className="text-slate-600 text-sm font-light">MAster Non-stock Item System</p>
+
+          {/* Bottom decorative element */}
+          <div className="relative z-10 pt-4">
+            <div className="text-5xl opacity-20">📁</div>
+          </div>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
-          {/* Gradient Header Bar */}
-          <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+        {/* Right Section - Login Form */}
+        <div className="flex flex-col justify-center p-6 md:p-8">
+          {/* Mobile Header */}
+          <div className="md:hidden mb-4 text-center">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl mb-3 shadow-lg">
+              <span className="text-3xl">📋</span>
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent mb-1">
+              MANIS
+            </h1>
+            <p className="text-slate-600 text-xs font-light">MAster Non-stock Item System</p>
+          </div>
 
-          <div className="p-8 md:p-10">
-            <h2 className="text-2xl font-bold text-slate-900 mb-1">Masuk ke Akun</h2>
-            <p className="text-slate-500 text-xs mb-5 font-light">Masukkan kredensial untuk melanjutkan</p>
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Selamat Datang</h2>
+            <p className="text-slate-500 text-xs mb-6 font-light">Masukkan kredensial untuk melanjutkan ke sistem</p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {/* Username Field */}
               <div>
                 <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-2">
@@ -86,7 +130,7 @@ export default function LoginPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     disabled={isLoading}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 disabled:bg-slate-50 text-slate-900 placeholder-slate-400 font-medium"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 disabled:bg-slate-50 text-slate-900 placeholder-slate-400 font-medium"
                     placeholder="admin"
                   />
                 </div>
@@ -105,7 +149,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 disabled:bg-slate-50 text-slate-900 placeholder-slate-400 font-medium"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 disabled:bg-slate-50 text-slate-900 placeholder-slate-400 font-medium"
                     placeholder="••••••••"
                   />
                 </div>
@@ -125,7 +169,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 transform hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed shadow-md flex items-center justify-center gap-2 text-base mt-1"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-300 transform hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed shadow-md flex items-center justify-center gap-2 text-sm mt-1"
               >
                 {isLoading ? (
                   <>
@@ -142,7 +186,7 @@ export default function LoginPage() {
             </form>
 
             {/* Divider */}
-            <div className="relative my-5">
+            <div className="relative my-3">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-slate-200"></div>
               </div>
@@ -156,7 +200,7 @@ export default function LoginPage() {
               type="button"
               onClick={handleGuestLogin}
               disabled={isLoading}
-              className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl transition duration-300 transform hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed border-2 border-slate-300 hover:border-slate-400 flex items-center justify-center gap-2 text-base"
+              className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-lg transition duration-300 transform hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed border-2 border-slate-300 hover:border-slate-400 flex items-center justify-center gap-2 text-sm"
             >
               {isLoading ? (
                 <>
@@ -173,31 +217,28 @@ export default function LoginPage() {
           </div>
 
           {/* Info Footer */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 md:px-10 py-6 border-t border-slate-200">
-            <p className="text-slate-600 font-semibold text-xs uppercase tracking-wide mb-4 block">Tipe Akses</p>
+          <div className="mt-4 pt-4 border-t border-slate-200">
+            <p className="text-slate-600 font-semibold text-xs uppercase tracking-wide mb-2 block">Tipe Akses</p>
             
-            <div className="space-y-3">
-              <div className="flex gap-4 items-start">
-                <div className="text-2xl flex-shrink-0">🔐</div>
+            <div className="space-y-2">
+              <div className="flex gap-2 items-start">
+                <div className="text-lg flex-shrink-0 mt-0">🔐</div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Admin</h3>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">Akses penuh untuk membuat, mengedit, dan menghapus data master</p>
+                  <h3 className="text-xs font-bold text-slate-900">Admin</h3>
+                  <p className="text-xs text-slate-600 mt-0.25 leading-relaxed">Akses penuh untuk membuat, mengedit, dan menghapus data</p>
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start">
-                <div className="text-2xl flex-shrink-0">👥</div>
+              <div className="flex gap-2 items-start">
+                <div className="text-lg flex-shrink-0 mt-0">👥</div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Tamu</h3>
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">Akses read-only, hanya dapat melihat data tanpa dapat mengubahnya</p>
+                  <h3 className="text-xs font-bold text-slate-900">Tamu</h3>
+                  <p className="text-xs text-slate-600 mt-0.25 leading-relaxed">Akses read-only, hanya dapat melihat data</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Footer */}
-          <div className="bg-slate-50 px-8 md:px-10 py-3 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500 font-light">SKF Indonesia © 2026 · MANIS v1.0</p>
+            <p className="text-xs text-slate-400 font-light mt-3 text-center">SKF Indonesia © 2026 · MANIS v1.0</p>
           </div>
         </div>
       </div>
