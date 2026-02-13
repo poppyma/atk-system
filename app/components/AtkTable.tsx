@@ -79,10 +79,14 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
     }
   }, [items, isModalOpen, selectedItem?.id]);
 
-  // Filter berdasarkan search - hanya berdasarkan description
+  // Filter berdasarkan search - IPD, Description, dan Specification
   const filteredItems = items.filter((item) => {
     const keyword = searchTerm.toLowerCase();
-    return (item.description ?? "").toLowerCase().includes(keyword);
+    return (
+      (item.ipd ?? "").toLowerCase().includes(keyword) ||
+      (item.description ?? "").toLowerCase().includes(keyword) ||
+      (item.specification ?? "").toLowerCase().includes(keyword)
+    );
   });
 
   // Sort
@@ -149,7 +153,7 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
         <div className="flex-1 flex gap-2">
           <input
             type="text"
-            placeholder="Cari berdasarkan Deskripsi..."
+            placeholder="Cari berdasarkan IPD, Deskripsi, atau Spesifikasi..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
