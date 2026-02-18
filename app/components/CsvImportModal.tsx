@@ -215,13 +215,13 @@ export default function CsvImportModal({ isOpen, onClose, onSubmit }: CsvImportM
             <p className="text-sm font-semibold text-blue-900">ℹ️ Panduan Kolom CSV</p>
             <ul className="mt-2 text-xs text-blue-800 space-y-1">
               <li><strong>IPD</strong> (wajib): Kode item unik</li>
-              <li><strong>Description</strong> (wajib): Nama/deskripsi barang</li>
-              <li><strong>Specification</strong>: Spesifikasi teknis (opsional)</li>
-              <li><strong>Qty</strong>: Jumlah (opsional)</li>
-              <li><strong>UoM</strong> (wajib): Satuan (PCS, BOX, SET, PAK, RIM, ROLL, PACK)</li>
-              <li><strong>LastOrder</strong>: Riwayat pesanan (opsional)</li>
+              <li><strong>Description</strong> : Nama/deskripsi barang</li>
+              <li><strong>Specification</strong>: Spesifikasi teknis</li>
+              <li><strong>Qty</strong>: Jumlah</li>
+              <li><strong>UoM</strong>: Satuan (PCS, BOX, SET, PAK, RIM, ROLL, PACK)</li>
+              <li><strong>LastOrder</strong>: Riwayat pesanan</li>
               <li><strong>Remark</strong>: Catatan (opsional)</li>
-              <li><strong>Foto</strong> (opsional): URL gambar atau kosongkan (contoh: https://...)</li>
+              <li><strong>Foto</strong>: URL gambar atau kosongkan (contoh: https://...)</li>
             </ul>
           </div>
 
