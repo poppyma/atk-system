@@ -250,6 +250,8 @@ export default function CsvImportModal({ isOpen, onClose, onSubmit }: CsvImportM
                       <th className="px-4 py-2 text-left font-semibold text-gray-900">Specification</th>
                       <th className="px-4 py-2 text-left font-semibold text-gray-900">Qty</th>
                       <th className="px-4 py-2 text-left font-semibold text-gray-900">UoM</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-900">Last Order</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-900">Remark</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -260,6 +262,8 @@ export default function CsvImportModal({ isOpen, onClose, onSubmit }: CsvImportM
                         <td className="px-4 py-2 text-gray-600">{item.specification}</td>
                         <td className="px-4 py-2 text-gray-600">{item.qty || "-"}</td>
                         <td className="px-4 py-2 text-gray-900 font-medium">{item.uom}</td>
+                        <td className="px-4 py-2 text-gray-900 font-medium">{item.lastorder}</td>
+                        <td className="px-4 py-2 text-gray-900 font-medium">{item.remark}</td>
                       </tr>
                     ))}
                   </tbody>
