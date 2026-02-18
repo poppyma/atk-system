@@ -13,8 +13,10 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
   const { id } = use(params);
   const router = useRouter();
   const [item, setItem] = useState<PhotoItem | null>(null);
+  const [displayImage, setDisplayImage] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [imageLoadError, setImageLoadError] = useState(false);
 
   useEffect(() => {
     const fetchPhoto = async () => {
@@ -25,7 +27,19 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
         }
         const data = await response.json();
         setItem(data);
+
+        // Handle image loading for external URLs
+        if (data.foto && (data.foto.startsWith("http://") || data.foto.startsWith("https://"))) {
+          const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}&t=${Date.now()}`;
+          
+          // Set proxy URL directly for immediate loading
+          setDisplayImage(proxyUrl);
+          setImageLoadError(false);
+        } else {
+          setDisplayImage(data.foto);
+        }
       } catch (err: any) {
+        console.error("Fetch photo error:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -90,17 +104,48 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
     <div className="fixed inset-0 bg-black flex items-center justify-center overflow-hidden">
       {/* Image Container */}
       <div className="flex items-center justify-center w-full h-full p-4">
-        {item.foto ? (
+        {displayImage && !imageLoadError ? (
           <img
-            src={item.foto}
-            alt={item.description}
+            key={displayImage}
+            src={displayImage}
+            alt={item?.description}
             className="max-h-full max-w-full object-contain"
-            title={item.description}
+            title={item?.description}
+            onError={() => {
+              console.warn("Image failed to load:", displayImage);
+              setImageLoadError(true);
+            }}
+            onLoad={() => {
+              console.log("Image loaded successfully:", displayImage);
+              setImageLoadError(false);
+            }}
           />
         ) : (
-          <div className="text-center text-gray-400">
-            <div className="text-6xl mb-4">🖼️</div>
-            <p>Foto tidak tersedia</p>
+          <div className="text-center">
+            {displayImage && imageLoadError ? (
+              <>
+                <div className="text-6xl mb-4">⚠️</div>
+                <p className="text-gray-400 mb-2">Gambar tidak dapat ditampilkan</p>
+                <p className="text-gray-500 text-sm mb-4">Coba download file dan buka secara manual</p>
+                <button
+                  onClick={() => {
+                    if (item?.foto) {
+                      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(item.foto)}&t=${Date.now()}`;
+                      setDisplayImage(proxyUrl);
+                      setImageLoadError(false);
+                    }
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
+                >
+                  Coba Lagi
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="text-6xl mb-4">🖼️</div>
+                <p className="text-gray-400">Foto tidak tersedia</p>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -111,7 +156,7 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
         <button
           onClick={handleDownload}
           className="bg-white text-gray-900 rounded-full p-3 hover:bg-gray-100 transition-colors shadow-lg flex items-center justify-center"
-          title="Download foto"
+          title=""
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -138,7 +183,7 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
 
       {/* Title at bottom */}
       <div className="fixed bottom-4 left-4 text-white z-40">
-        <p className="text-sm font-medium">{item.description}</p>
+        <p className="text-sm font-medium">{item?.description}</p>
       </div>
     </div>
   );

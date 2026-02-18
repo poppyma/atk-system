@@ -4,6 +4,7 @@ import { AtkItem, Quotation } from "@/app/data/atkData";
 import { useState } from "react";
 import AddQuotationModal from "./AddQuotationModal";
 import EditQuotationModal from "./EditQuotationModal";
+import CsvImportQuotationModal from "./CsvImportQuotationModal";
 
 interface QuotationModalProps {
   item: AtkItem | null;
@@ -27,6 +28,12 @@ interface QuotationModalProps {
     remark: string;
   }) => Promise<void>;
   onDeleteQuotation?: (id: string) => Promise<void>;
+  onBulkImportQuotation?: (itemId: string, quotations: Array<{
+    supplier: string;
+    price: number;
+    unit: string;
+    remark: string;
+  }>) => Promise<void>;
 }
 
 const formatPrice = (price: number): string => {
@@ -45,9 +52,11 @@ export default function QuotationModal({
   onAddQuotation,
   onEditQuotation,
   onDeleteQuotation,
+  onBulkImportQuotation,
 }: QuotationModalProps) {
   const [isAddQuotationOpen, setIsAddQuotationOpen] = useState(false);
   const [isEditQuotationOpen, setIsEditQuotationOpen] = useState(false);
+  const [isCsvImportOpen, setIsCsvImportOpen] = useState(false);
   const [selectedQuotation, setSelectedQuotation] = useState<Quotation | null>(null);
 
   const handleEditClick = (quotation: Quotation) => {
@@ -125,12 +134,22 @@ export default function QuotationModal({
               Penawaran Harga dari Supplier
             </h3>
             {isAdmin && onAddQuotation && (
-              <button
-                onClick={() => setIsAddQuotationOpen(true)}
-                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors flex items-center gap-2"
-              >
-                <span>➕</span> Tambah Penawaran
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsAddQuotationOpen(true)}
+                  className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors flex items-center gap-2"
+                >
+                  <span>➕</span> Tambah Penawaran
+                </button>
+                {onBulkImportQuotation && (
+                  <button
+                    onClick={() => setIsCsvImportOpen(true)}
+                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    <span>📥</span> Import CSV
+                  </button>
+                )}
+              </div>
             )}
           </div>
 
@@ -314,6 +333,18 @@ export default function QuotationModal({
               await onEditQuotation(quotation);
               setIsEditQuotationOpen(false);
               setSelectedQuotation(null);
+            }}
+          />
+        )}
+
+        {/* CSV Import Quotation Modal */}
+        {onBulkImportQuotation && item && (
+          <CsvImportQuotationModal
+            isOpen={isCsvImportOpen}
+            onClose={() => setIsCsvImportOpen(false)}
+            onSubmit={async (quotations) => {
+              await onBulkImportQuotation(item.id, quotations);
+              setIsCsvImportOpen(false);
             }}
           />
         )}

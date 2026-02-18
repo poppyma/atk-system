@@ -26,6 +26,12 @@ interface AtkTableProps {
     remark: string;
   }) => Promise<void>;
   onDeleteQuotation?: (id: string) => Promise<void>;
+  onBulkImportQuotation?: (itemId: string, quotations: Array<{
+    supplier: string;
+    price: number;
+    unit: string;
+    remark: string;
+  }>) => Promise<void>;
 }
 
 // Fungsi untuk mendapatkan harga dan supplier termurah
@@ -34,7 +40,6 @@ const getCheapestOption = (item: AtkItem) => {
     return { supplier: "N/A", price: 0 };
   }
 
-  // Filter quotations dengan harga > 0
   const validQuotations = item.quotations.filter((q) => q.price > 0);
 
   if (validQuotations.length === 0) {
@@ -60,7 +65,7 @@ const formatPrice = (price: number): string => {
   }).format(price);
 };
 
-export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotation, onEditQuotation, onDeleteQuotation }: AtkTableProps) {
+export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotation, onEditQuotation, onDeleteQuotation, onBulkImportQuotation }: AtkTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -89,9 +94,8 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
     );
   });
 
-  // Sort
   const sortedItems = sortColumn === "" 
-    ? [...filteredItems] // Keep original order from database (DESC)
+    ? [...filteredItems] 
     : [...filteredItems].sort((a, b) => {
         let aValue: any = a[sortColumn as keyof AtkItem];
         let bValue: any = b[sortColumn as keyof AtkItem];
@@ -289,7 +293,7 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
                     <td className="border-r border-gray-200 px-4 py-3 text-center">
                       {item.foto ? (
                         <a
-                          href={`/photo/${item.id}`}
+                          href={item.foto}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 underline text-sm font-medium hover:font-semibold transition-all"
@@ -432,6 +436,7 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
         onAddQuotation={onAddQuotation}
         onEditQuotation={onEditQuotation}
         onDeleteQuotation={onDeleteQuotation}
+        onBulkImportQuotation={onBulkImportQuotation}
       />
     </div>
   );

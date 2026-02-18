@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import AtkTable from "@/app/components/AtkTable";
 import CreateAtkModal from "@/app/components/CreateAtkModal";
 import EditAtkModal from "@/app/components/EditAtkModal";
+import CsvImportModal from "@/app/components/CsvImportModal";
 import Toast from "@/app/components/Toast";
 import LoginPage from "@/app/components/LoginPage";
 import { AtkItem } from "@/app/data/atkData";
@@ -14,12 +15,12 @@ export default function Home() {
   const [items, setItems] = useState<AtkItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCsvImportOpen, setIsCsvImportOpen] = useState(false);
   const [selectedItemForEdit, setSelectedItemForEdit] = useState<AtkItem | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch data dari API saat component mount - MUST be before conditional return
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -43,7 +44,6 @@ export default function Home() {
     }
   }, [isLoggedIn]);
 
-  // If not logged in, show login page
   if (!isLoggedIn) {
     return <LoginPage />;
   }
@@ -77,6 +77,44 @@ export default function Home() {
       const createdItem = await response.json();
       setItems([createdItem, ...items]);
       setToastMessage(`Data "${newItem.description}" berhasil ditambahkan!`);
+      setShowToast(true);
+    } catch (error: any) {
+      setToastMessage(`✗ Gagal: ${error.message}`);
+      setShowToast(true);
+    }
+  };
+
+  const handleCsvImport = async (
+    csvItems: Omit<AtkItem, "id" | "quotations">[]
+  ) => {
+    try {
+      const response = await fetch("/api/atk-items/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: csvItems,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to import items");
+      }
+
+      const result = await response.json();
+      
+      if (result.items && result.items.length > 0) {
+        setItems([...result.items, ...items]);
+      }
+
+      let message = `✓ Berhasil mengimport ${result.success} dari ${result.total} item`;
+      if (result.failed > 0) {
+        message += ` (${result.failed} gagal: ${result.errors.join("; ")})`;
+      }
+      
+      setToastMessage(message);
       setShowToast(true);
     } catch (error: any) {
       setToastMessage(`✗ Gagal: ${error.message}`);
@@ -175,7 +213,6 @@ export default function Home() {
         throw new Error(errorData.error || "Failed to add quotation");
       }
 
-      // Refresh data
       const itemsResponse = await fetch("/api/atk-items");
       if (itemsResponse.ok) { 
         const updatedItems = await itemsResponse.json();
@@ -211,7 +248,6 @@ export default function Home() {
         throw new Error(errorData.error || "Failed to edit quotation");
       }
 
-      // Refresh data
       const itemsResponse = await fetch("/api/atk-items");
       if (itemsResponse.ok) {
         const updatedItems = await itemsResponse.json();
@@ -237,7 +273,6 @@ export default function Home() {
         throw new Error(errorData.error || "Failed to delete quotation");
       }
 
-      // Refresh data
       const itemsResponse = await fetch("/api/atk-items");
       if (itemsResponse.ok) {
         const updatedItems = await itemsResponse.json();
@@ -252,7 +287,55 @@ export default function Home() {
     }
   };
 
-  // If not logged in, show login page
+  const handleBulkImportQuotation = async (
+    itemId: string,
+    quotations: Array<{
+      supplier: string;
+      price: number;
+      unit: string;
+      remark: string;
+    }>
+  ) => {
+    try {
+      const response = await fetch("/api/quotations/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          atkItemId: itemId,
+          quotations: quotations,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to import quotations");
+      }
+
+      const result = await response.json();
+
+      // Refresh items to get updated quotations
+      const itemsResponse = await fetch("/api/atk-items");
+      if (itemsResponse.ok) {
+        const updatedItems = await itemsResponse.json();
+        setItems(updatedItems);
+      }
+
+      // Show success message with details
+      let message = `✓ Berhasil mengimport ${result.success} dari ${result.total} penawaran`;
+      if (result.failed > 0) {
+        message += ` (${result.failed} gagal: ${result.errors.slice(0, 2).join("; ")})`;
+      }
+
+      setToastMessage(message);
+      setShowToast(true);
+    } catch (error: any) {
+      setToastMessage(`✗ Gagal: ${error.message}`);
+      setShowToast(true);
+    }
+  };
+
   if (!isLoggedIn) {
     return <LoginPage />;
   }
@@ -264,7 +347,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900">
                 📋 MANIS (MAster Non-stock Item System)
               </h1>
               <p className="mt-2 text-sm text-gray-600">
@@ -276,12 +359,20 @@ export default function Home() {
                 {role === "admin" ? "🔐 Admin" : role === "guest" ? "👥 Tamu" : "👤 User"} | Total Items: {items.length}
               </div>
               {role === "admin" && (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-4 py-1.5 font-semibold text-sm text-white hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
-                >
-                  + Buat Input Data Master
-                </button>
+                <>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-4 py-1.5 font-semibold text-sm text-white hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
+                  >
+                    + Buat Input Data Master
+                  </button>
+                  <button
+                    onClick={() => setIsCsvImportOpen(true)}
+                    className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1.5 font-semibold text-sm text-white hover:from-blue-600 hover:to-blue-700 transition-all shadow-md hover:shadow-lg"
+                  >
+                    📥 Import CSV
+                  </button>
+                </>
               )}
               <button
                 onClick={logout}
@@ -347,7 +438,7 @@ export default function Home() {
               </div>
             </div>
           ) : items.length > 0 ? (
-            <AtkTable items={items} isAdmin={role === "admin"} onEdit={handleEditItem} onDelete={handleDeleteItem} onAddQuotation={handleAddQuotation} onEditQuotation={handleEditQuotation} onDeleteQuotation={handleDeleteQuotation} />
+            <AtkTable items={items} isAdmin={role === "admin"} onEdit={handleEditItem} onDelete={handleDeleteItem} onAddQuotation={handleAddQuotation} onEditQuotation={handleEditQuotation} onDeleteQuotation={handleDeleteQuotation} onBulkImportQuotation={handleBulkImportQuotation} />
           ) : (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
@@ -382,6 +473,15 @@ export default function Home() {
           }}
           item={selectedItemForEdit}
           onSubmit={handleUpdateItem}
+        />
+      )}
+
+      {/* CSV Import Modal */}
+      {role === "admin" && (
+        <CsvImportModal
+          isOpen={isCsvImportOpen}
+          onClose={() => setIsCsvImportOpen(false)}
+          onSubmit={handleCsvImport}
         />
       )}
 

@@ -17,7 +17,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<"admin" | "user" | "guest">("guest");
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load auth state from localStorage on mount
   useEffect(() => {
     const savedAuth = localStorage.getItem("auth");
     if (savedAuth) {
@@ -33,7 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = (username: string, password: string): boolean => {
-    // Hardcode admin credentials
     if (username === "admin" && password === "admin123") {
       setIsLoggedIn(true);
       setRole("admin");
@@ -61,7 +59,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("auth");
   };
 
-  // Always provide context, but return loading state if not hydrated
   const value: AuthContextType = {
     isLoggedIn,
     role,
