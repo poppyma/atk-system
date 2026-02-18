@@ -293,10 +293,10 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
                     <td className="border-r border-gray-200 px-4 py-3 text-center">
                       {item.foto ? (
                         <a
-                          href={item.foto}
+                          href={`/photo/${item.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 underline text-sm font-medium hover:font-semibold transition-all"
+                          className="text-blue-600 hover:text-blue-800 underline font-medium"
                         >
                           Lihat
                         </a>

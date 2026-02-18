@@ -32,6 +32,7 @@ export default function EditAtkModal({
   const [fotoPreview, setFotoPreview] = useState<string>("");
 
   const UoMOptions = ["PCS", "BOX", "SET", "PAK", "RIM", "ROLL", "PACK"];
+  const [fileName, setFileName] = useState<string>("");
 
   // Set form data when item loads
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function EditAtkModal({
       uom: formData.uom,
       lastOrder: formData.lastOrder,
       remark: formData.remark,
-      foto: formData.foto || "https://via.placeholder.com/100?text=ATK",
+      foto: formData.foto ||  "/images/no-image.png",
       quotations: item.quotations,
     });
 
@@ -101,6 +102,8 @@ export default function EditAtkModal({
     if (name === "foto" && (e.target as HTMLInputElement).type === "file") {
       const file = ((e.target as HTMLInputElement).files || [])[0];
       if (file) {
+        setFileName(file.name);
+
         const reader = new FileReader();
         reader.onload = (event) => {
           const base64String = event.target?.result as string;
@@ -303,13 +306,24 @@ export default function EditAtkModal({
             </label>
             <div className="flex gap-4">
               <div className="flex-1">
-                <input
-                  type="file"
-                  name="foto"
-                  onChange={handleChange}
-                  accept="image/*"
-                  className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:border-blue-500 transition-colors"
-                />
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                    Pilih File
+                    <input
+                      type="file"
+                      name="foto"
+                      onChange={handleChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </label>
+
+                  {fileName && (
+                    <span className="text-sm text-gray-700 font-medium">
+                      {fileName}
+                    </span>
+                  )}
+                </div>
                 <p className="mt-1 text-xs text-gray-500">Format: JPG, PNG, GIF (Max 5MB)</p>
               </div>
               {fotoPreview && (

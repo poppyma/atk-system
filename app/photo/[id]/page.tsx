@@ -30,7 +30,9 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
 
         // Handle image loading for external URLs
         if (data.foto && (data.foto.startsWith("http://") || data.foto.startsWith("https://"))) {
-          const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}&t=${Date.now()}`;
+          //const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}&t=${Date.now()}`;
+          const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}`
+
           
           // Set proxy URL directly for immediate loading
           setDisplayImage(proxyUrl);
@@ -49,28 +51,34 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
     fetchPhoto();
   }, [id]);
 
-  const handleDownload = () => {
-    if (!item?.foto) return;
+  const handleDownload = async () => {
+  if (!item?.foto) return;
 
-    // Jika base64
-    if (item.foto.startsWith("data:")) {
-      const link = document.createElement("a");
-      link.href = item.foto;
-      link.download = `${item.description}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      // Jika URL biasa
-      const link = document.createElement("a");
-      link.href = item.foto;
-      link.download = item.description;
-      link.target = "_blank";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  try {
+    let downloadUrl = item.foto;
+
+    // Kalau URL external → pakai proxy
+    if (item.foto.startsWith("http")) {
+      downloadUrl = `/api/proxy-image?url=${encodeURIComponent(item.foto)}&download=true`;
     }
-  };
+
+    const response = await fetch(downloadUrl);
+    const blob = await response.blob();
+
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `${item.description}.png`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (err) {
+    console.error("Download error:", err);
+  }
+};
 
   if (loading) {
     return (
