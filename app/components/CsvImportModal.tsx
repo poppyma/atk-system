@@ -123,9 +123,7 @@ export default function CsvImportModal({ isOpen, onClose, onSubmit }: CsvImportM
 
   const handleDownloadTemplate = () => {
     const template = "IPD,Description,Specification,Qty,UoM,LastOrder,Remark,Foto\n" +
-      "IPD001,Bearing,Angular Contact,10,BOX,50 pcs,Supplier A,\n" +
-      "IPD002,Seal,Lip Seal,5,PAK,20 pcs,,https://drive.google.com/file/d/1qltOJNonhLoFHt5QZi7uZxgri0JNNkve/view?usp=sharing\n" +
-      "IPD003,Paper,A4 100GSM,100,RIM,,Untuk print,https://example.com/paper.jpg\n";
+      "IPD001,Bearing,Angular Contact,10,BOX,100 pcs,CobaCoba,https://drive.google.com/file/d/1qItOJNonhLoFHt5QZI7uZxgri0JNNkve/view?usp=sharing";
     
     const element = document.createElement("a");
     element.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(template));
