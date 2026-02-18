@@ -31,6 +31,7 @@ export default function AddQuotationModal({
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [customSupplier, setCustomSupplier] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -52,12 +53,19 @@ export default function AddQuotationModal({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.supplier.trim()) {
+    const finalSupplier =
+      formData.supplier === "__OTHER__"
+        ? customSupplier.trim()
+        : formData.supplier.trim();
+
+    if (!finalSupplier) {
       newErrors.supplier = "Nama supplier tidak boleh kosong";
     }
+
     if (formData.price <= 0) {
       newErrors.price = "Harga harus lebih dari 0";
     }
+
     if (!formData.unit.trim()) {
       newErrors.unit = "Satuan tidak boleh kosong";
     }
@@ -66,29 +74,40 @@ export default function AddQuotationModal({
     return Object.keys(newErrors).length === 0;
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
+    const finalSupplier =
+      formData.supplier === "__OTHER__"
+        ? customSupplier.trim()
+        : formData.supplier;
+
+    const updatedFormData = {
+      ...formData,
+      supplier: finalSupplier,
+    };
+
     setLoading(true);
     try {
-      await onSubmit(formData);
-      // Reset form hanya ketika submission berhasil
+      await onSubmit(updatedFormData);
       setFormData({
         supplier: "",
         price: 0,
         unit: "",
         remark: "",
       });
+      setCustomSupplier("");
       onClose();
     } catch (error) {
       console.error("Error submitting quotation:", error);
-      // Jangan close modal jika ada error, biarkan user bisa retry
     } finally {
       setLoading(false);
     }
   };
+
 
   if (!isOpen) return null;
 
@@ -142,7 +161,21 @@ export default function AddQuotationModal({
               <option value="Datascript">Datascript</option>
               <option value="Nasional">Nasional</option>
               <option value="Berkat Karya Nusantara">Berkat Karya Nusantara</option>
+              <option value="__OTHER__">Lainnya</option>
             </select>
+
+            {formData.supplier === "__OTHER__" && (
+              <div className="mt-3">
+                <input
+                  type="text"
+                  placeholder="Masukkan nama supplier"
+                  value={customSupplier}
+                  onChange={(e) => setCustomSupplier(e.target.value)}
+                  className="w-full rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 transition-colors"
+                />
+              </div>
+            )}
+
             {errors.supplier && (
               <p className="mt-1 text-sm text-red-600">{errors.supplier}</p>
             )}

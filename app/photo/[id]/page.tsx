@@ -30,9 +30,7 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
 
         // Handle image loading for external URLs
         if (data.foto && (data.foto.startsWith("http://") || data.foto.startsWith("https://"))) {
-          //const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}&t=${Date.now()}`;
           const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}`
-
           
           // Set proxy URL directly for immediate loading
           setDisplayImage(proxyUrl);
