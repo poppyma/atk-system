@@ -396,7 +396,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Merk/Supplier</p>
-                <p className="text-2xl font-bold text-gray-900">4</p>
+                <p className="text-2xl font-bold text-gray-900">4+</p>
               </div>
             </div>
           </div>
