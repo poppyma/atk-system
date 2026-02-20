@@ -34,7 +34,6 @@ export default function EditAtkModal({
   const UoMOptions = ["PCS", "BOX", "SET", "PAK", "RIM", "ROLL", "PACK"];
   const [fileName, setFileName] = useState<string>("");
 
-  // Set form data when item loads
   useEffect(() => {
     if (item) {
       setFormData({
@@ -48,7 +47,6 @@ export default function EditAtkModal({
         foto: item.foto || "",
         quotationRemark: "",
       });
-      // Set preview dari existing foto
       if (item.foto) {
         setFotoPreview(item.foto);
       }
@@ -98,7 +96,6 @@ export default function EditAtkModal({
   ) => {
     const { name } = e.target;
     
-    // Handle file input
     if (name === "foto" && (e.target as HTMLInputElement).type === "file") {
       const file = ((e.target as HTMLInputElement).files || [])[0];
       if (file) {
@@ -116,7 +113,6 @@ export default function EditAtkModal({
         reader.readAsDataURL(file);
       }
     } else {
-      // Handle regular input
       const value = (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
       setFormData((prev) => ({
         ...prev,
@@ -124,7 +120,6 @@ export default function EditAtkModal({
       }));
     }
 
-    // Clear error for this field
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };

@@ -32,7 +32,6 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
         if (data.foto && (data.foto.startsWith("http://") || data.foto.startsWith("https://"))) {
           const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(data.foto)}`
           
-          // Set proxy URL directly for immediate loading
           setDisplayImage(proxyUrl);
           setImageLoadError(false);
         } else {
@@ -55,7 +54,6 @@ export default function PhotoPage({ params }: { params: Promise<{ id: string }> 
   try {
     let downloadUrl = item.foto;
 
-    // Kalau URL external → pakai proxy
     if (item.foto.startsWith("http")) {
       downloadUrl = `/api/proxy-image?url=${encodeURIComponent(item.foto)}&download=true`;
     }

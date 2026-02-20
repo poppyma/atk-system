@@ -46,14 +46,80 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-6">
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl shadow-2xl overflow-hidden bg-white">
+    <div className="min-h-screen flex items-center justify-center px-4 py-6 relative overflow-hidden bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50">
+      {/* Abstract decorative shapes */}
+      <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }} viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+        {/* Large circles */}
+        <circle cx="100" cy="120" r="150" fill="rgba(59, 130, 246, 0.12)" />
+        <circle cx="850" cy="500" r="120" fill="rgba(191, 219, 254, 0.11)" />
+        <circle cx="950" cy="900" r="200" fill="rgba(96, 165, 250, 0.09)" />
+        <circle cx="150" cy="750" r="100" fill="rgba(59, 130, 246, 0.1)" />
+        <circle cx="700" cy="150" r="180" fill="rgba(147, 197, 253, 0.08)" />
+        
+        {/* Medium circles scattered */}
+        <circle cx="400" cy="200" r="70" fill="rgba(96, 165, 250, 0.12)" />
+        <circle cx="600" cy="400" r="60" fill="rgba(191, 219, 254, 0.1)" />
+        <circle cx="300" cy="850" r="85" fill="rgba(59, 130, 246, 0.11)" />
+        <circle cx="800" cy="700" r="75" fill="rgba(147, 197, 253, 0.09)" />
+        
+        {/* Small circles */}
+        <circle cx="200" cy="300" r="30" fill="rgba(59, 130, 246, 0.15)" />
+        <circle cx="500" cy="600" r="25" fill="rgba(96, 165, 250, 0.12)" />
+        <circle cx="750" cy="300" r="35" fill="rgba(191, 219, 254, 0.13)" />
+        <circle cx="450" cy="850" r="28" fill="rgba(59, 130, 246, 0.1)" />
+        
+        {/* Squares and rectangles */}
+        <rect x="800" y="50" width="200" height="200" fill="rgba(147, 197, 253, 0.1)" transform="rotate(45 900 150)" />
+        <rect x="50" y="400" width="60" height="60" fill="rgba(191, 219, 254, 0.12)" />
+        <rect x="600" y="150" width="80" height="80" fill="rgba(59, 130, 246, 0.09)" transform="rotate(30 640 190)" />
+        <rect x="200" y="550" width="70" height="70" fill="rgba(96, 165, 250, 0.11)" transform="rotate(-25 235 585)" />
+        <rect x="850" y="400" width="90" height="90" fill="rgba(147, 197, 253, 0.08)" transform="rotate(60 895 445)" />
+        <rect x="100" y="600" width="50" height="50" fill="rgba(191, 219, 254, 0.1)" transform="rotate(-45 125 625)" />
+        
+        {/* Triangles */}
+        <polygon points="0,900 200,700 100,900" fill="rgba(96, 165, 250, 0.09)" />
+        <polygon points="800,100 850,50 900,100 850,150" fill="rgba(59, 130, 246, 0.12)" />
+        <polygon points="500,100 550,50 550,150" fill="rgba(191, 219, 254, 0.1)" />
+        <polygon points="100,200 150,150 150,250" fill="rgba(96, 165, 250, 0.11)" />
+        <polygon points="700,600 750,550 700,700" fill="rgba(59, 130, 246, 0.09)" />
+        
+        {/* Wavy and curved lines */}
+        <path d="M 0,300 Q 250,250 500,300 T 1000,300" stroke="rgba(59, 130, 246, 0.08)" strokeWidth="2" fill="none" />
+        <path d="M 0,700 Q 250,650 500,700 T 1000,700" stroke="rgba(147, 197, 253, 0.09)" strokeWidth="2" fill="none" />
+        <path d="M 0,450 Q 200,400 400,450 T 800,450 T 1000,450" stroke="rgba(96, 165, 250, 0.07)" strokeWidth="3" fill="none" />
+        <path d="M 100,0 Q 150,200 100,400" stroke="rgba(191, 219, 254, 0.08)" strokeWidth="2" fill="none" />
+        <path d="M 900,0 Q 850,150 900,300" stroke="rgba(59, 130, 246, 0.08)" strokeWidth="2" fill="none" />
+        
+        {/* Dots pattern scatter */}
+        <circle cx="150" cy="650" r="8" fill="rgba(59, 130, 246, 0.12)" />
+        <circle cx="200" cy="700" r="6" fill="rgba(147, 197, 253, 0.1)" />
+        <circle cx="250" cy="670" r="7" fill="rgba(96, 165, 250, 0.11)" />
+        <circle cx="180" cy="720" r="5" fill="rgba(191, 219, 254, 0.12)" />
+        <circle cx="280" cy="710" r="6" fill="rgba(59, 130, 246, 0.1)" />
+        <circle cx="350" cy="450" r="7" fill="rgba(96, 165, 250, 0.12)" />
+        <circle cx="380" cy="480" r="5" fill="rgba(147, 197, 253, 0.11)" />
+        <circle cx="320" cy="470" r="6" fill="rgba(191, 219, 254, 0.1)" />
+        <circle cx="750" cy="230" r="7" fill="rgba(59, 130, 246, 0.11)" />
+        <circle cx="780" cy="250" r="5" fill="rgba(96, 165, 250, 0.1)" />
+        <circle cx="900" cy="350" r="6" fill="rgba(147, 197, 253, 0.12)" />
+        <circle cx="920" cy="380" r="7" fill="rgba(191, 219, 254, 0.11)" />
+        <circle cx="620" cy="800" r="5" fill="rgba(59, 130, 246, 0.1)" />
+        <circle cx="650" cy="820" r="6" fill="rgba(96, 165, 250, 0.11)" />
+        <circle cx="590" cy="830" r="7" fill="rgba(147, 197, 253, 0.1)" />
+        
+        {/* Additional small geometric accents */}
+        <circle cx="400" cy="100" r="15" fill="rgba(191, 219, 254, 0.14)" />
+        <circle cx="150" cy="500" r="20" fill="rgba(59, 130, 246, 0.11)" />
+        <circle cx="820" cy="600" r="18" fill="rgba(96, 165, 250, 0.12)" />
+        <circle cx="550" cy="750" r="22" fill="rgba(147, 197, 253, 0.1)" />
+      </svg>
+
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl shadow-2xl overflow-hidden bg-white relative z-10">
         {/* Left Section - Branding & Description */}
         <div className="hidden md:flex flex-col justify-between bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 p-8 text-white relative overflow-hidden">
           {/* Decorative circles */}
           <div className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
           <div className="absolute bottom-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-          
           <div className="relative z-10">
             <h2 className="text-5xl md:text-6xl font-black leading-tight mb-1 tracking-tight drop-shadow-lg transform hover:scale-105 transition-transform duration-200">
               📋 MANIS
@@ -64,7 +130,7 @@ export default function LoginPage() {
             <p className="text-lg md:text-xl text-blue-50 font-semibold mb-6">
               Sistem Manajemen Item Non-Stock dan Supplier
             </p>
-
+            
             {/* Feature cards */}
             <div className="space-y-2">
               <div className="flex gap-3 items-start">

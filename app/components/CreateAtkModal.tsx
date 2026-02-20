@@ -83,7 +83,6 @@
     ) => {
       const { name } = e.target;
       
-      // Handle file input
       if (name === "foto" && (e.target as HTMLInputElement).type === "file") {
         const file = ((e.target as HTMLInputElement).files || [])[0];
         if (file) {
@@ -101,7 +100,6 @@
           reader.readAsDataURL(file);
         }
       } else {
-        // Handle regular input
         const value = (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value;
         setFormData((prev) => ({
           ...prev,

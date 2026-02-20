@@ -34,7 +34,6 @@ interface AtkTableProps {
   }>) => Promise<void>;
 }
 
-// Fungsi untuk mendapatkan harga dan supplier termurah
 const getCheapestOption = (item: AtkItem) => {
   if (item.quotations.length === 0) {
     return { supplier: "N/A", price: 0 };
@@ -74,7 +73,6 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
   const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 10;
 
-  // Update selectedItem ketika items berubah (untuk refresh quotations di modal)
   useEffect(() => {
     if (selectedItem && isModalOpen) {
       const updatedItem = items.find((item) => item.id === selectedItem.id);
@@ -107,7 +105,7 @@ export default function AtkTable({ items, isAdmin, onEdit, onDelete, onAddQuotat
           aValue = getCheapestOption(a).supplier;
           bValue = getCheapestOption(b).supplier;
         } else if (sortColumn === "id") {
-          // Sort ID as numeric if possible, otherwise as string
+
           const aNum = parseInt(aValue);
           const bNum = parseInt(bValue);
           if (!isNaN(aNum) && !isNaN(bNum)) {
